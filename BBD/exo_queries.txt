@@ -1,0 +1,125 @@
+1- Select * from services;
+2- Select col1, 2,3 from services;
+3- Select service, Noserv from services;
+4- Select * from employes;
+5- Select emploi from employes;
+6- Select distinct emploi from employes;
+7- Select * from employes where Noserv = 3;
+8- Select nom, prenom, Noemp, Noserv from employes where emploi = 'TECHNICIEN'; 
+9- Select service, Noserv from services where Noserv > 2;
+10- Select service, Noserv from services where Noserv < 2;
+11- Select * from employes where comm < sal;
+12- Select * from employes where comm is null;
+13- Select * from employes where comm is not null order by comm;
+14- Select * from employes where sup is not null;
+15- Select * from employes where sup is null;
+16- Select nom, emploi, sal, noserv from employes where Noserv = 5 and sal > 20000;
+17- Select * from employes where Noserv = 6 and emploi ='VENDEUR' and sal > 9500; 
+18- Select * from employes where emploi = 'DIRECTEUR' or emploi ='PRESIDENT';
+19- Select * from employes where emploi = 'DIRECTEUR' and not(Noserv=3);
+20- Select * from employes where emploi = "DIRECTEUR" or (emploi = "TECHNICIEN" and Noserv = 1);
+21- Select * from employes where Noserv = 1  and (emploi='DIRECTEUR' or emploi='TECHNICIEN');
+22- Select * from employes where (emploi = 'DIRECTEUR' or emploi ='TECHNICIEN') and Noserv = 1;
+23- Select * from employes where Noserv = 1 and not(emploi = 'DIRECTEUR' or emploi = 'TECHNICIEN');
+24- Select * from employes where emploi in('TECHNICIEN','COMPTABLE','VENDEUR');
+25- Select * from employes where emploi not in('TECHNICIEN','COMPTABLE','VENDEUR');
+26- Select * from employes where emploi = 'DIRECTEUR' and Noserv in(2,4,5); 
+27- Select * from employes where sup is not null and Noserv not in (1,3,5); 
+28- Select * from employes where sal between 20000 and 40000;
+29- Select * from employes where sal not between 20000 and 40000;
+30- Select * from employes where  not emploi = 'DIRECTEUR' and embauche not like'%88';
+31- Select * from employes where emploi = "DIRECTEUR" and noserv between 2 and 5;
+32- Select * from employes where nom like "M%";
+33- Select * from employes where nom like "%T";
+34- Select * from employes where nom like "%E%E%";
+35- Select * from employes where nom like "%e%" and nom not like "%E%E%";
+36- Select * from employes where nom like "%o%e%" or nom like "%e%o%";
+37- Select * from employes where nom like "_____n";
+38- Select * from employes where nom like "__r%";
+39- Select * from employes where nom not like "_____";
+40- Select nom, prenom, noserv, sal from employes where noserv = 3 order by sal;
+41- Select nom, prenom, noserv, sal from employes where noserv = 3 order by sal desc;
+42- Select nom, prenom, noserv, sal from employes where noserv = 3 order by 4 desc;
+43- Select nom, prenom, noserv, sal, emploi from employes order by emploi, sal desc;
+44- Select nom, prenom, noserv, sal, emploi from employes order by 5, 4 desc;
+45- Select nom, prenom, noserv, sal from employes where noserv = 3 order by comm;
+46- Select nom, prenom, noserv, sal from employes where noserv = 3 and comm is not null order by comm desc;
+47- Select nom, prenom, sal, services.service from employes inner join services on employes.noserv = services.noserv;
+48- Select nom, prenom, sal, services.service, employes.noserv from employes inner join services on employes.noserv = services.noserv;
+49- Select nom, prenom, sal, services.service as nom_serv, employes.noserv AS "numserv" from employes inner join services on numserv = services.noserv;
+
+53- Select * from services 
+where services.noserv 
+not in(select employes.noserv from employes);
+
+54-Select * from services 
+where services.noserv 
+in(select employes.noserv from employes);
+
+55- select * from employes 
+where employes.noserv 
+in(select services.noserv from services where ville ='LILLE');
+
+56-select * from employes
+where employes.sup in(select emp2.sup from employes as emp2 where
+emp2.nom = 'DUBOIS') and employes.nom != 'DUBOIS';
+
+57-select * from employes as emp
+where emp.embauche in(select emp2.embauche from employes as emp2 
+where emp2.nom = 'DUMONT') and emp.nom != 'DUMONT';
+
+58-select emp.nom, emp.prenom, emp.embauche from employes as emp 
+left join employes as e 
+on e.embauche > emp.embauche where e.nom = 'MINET';
+
+59- select emp.nom, emp.prenom, emp.embauche from employes as emp 
+left join employes as e 
+on e.embauche > emp.embauche where e.embauche =(select min(embauche) from employes 
+where employes.noserv = 6) and e.noserv = 6;
+
+-60 select emp.nom, emp.prenom, emp.embauche, emp.sal from employes as emp
+where sal >(select min(e2.sal) from employes as e2 where e2.noserv = 3) order by sal desc;
+
+61- select * from employes where employes.noserv in
+(select s1.noserv from services as s1 where s1.ville in(
+(select s.ville from services as s where s.noserv in(select e.noserv from employes as e where e.nom ='HAVET'))));
+
+62- select emp.* from employes as emp
+inner join employes as e on e.emploi = emp.emploi and e.noserv = 3 and emp.noserv = 1; 
+
+63- select * from employes where noserv = 1 and emploi not in(select e.emploi from employes as e where 
+e.noserv = 3);
+
+64- select * from employes where emploi in(select e.emploi from employes as e where e.nom ='CARON')
+and sal >(select e.sal from employes as e where e.nom ='CARON');
+
+65-
+select e.* from employes as e
+inner join employes as e2 on e.emploi = e2.emploi and e2.noserv 
+in(select s.noserv from services as s where s.service ='VENTES') and e.noserv = 1;
+
+66-
+select emp.* from employes as emp where emp.noserv in(select s.noserv from services as s where s.ville = 'LILLE')
+and emp.emploi in
+(select richy.emploi from employes as richy where richy.nom = 'RICHARD') 
+order by nom;
+
+67- select emp.* from employes as emp where emp.sal >
+(select avg(e.sal) from employes as e where e.noserv = emp.noserv);
+
+68- 
+select e.* from employes as e where e.noserv in
+(select s.noserv from services as s where s.service ='INFORMATIQUE')
+and DATE_FORMAT(e.embauche,'%Y') in(select DATE_FORMAT(e1.embauche,'%Y') from employes as e1 where e1.noserv in
+(select s.noserv from services as s where s.service ='VENTES'));
+
+69-
+select e.nom, e.emploi, s.ville from employes as e
+inner join services as s on e.noserv = s.noserv and e.noserv not in 
+(select e2.noserv from employes as e2 where e2.noemp = e.sup) and e.sup is not null;
+
+
+70-
+
+select e.nom, e.prenom, s.service,e.emploi, e.sal from employes as e
+inner join services as s on s.noserv = e.noserv and exists(select e2.noemp from employes as e2 where e2.sup = e.noemp);
