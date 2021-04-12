@@ -23,8 +23,8 @@
         <input type="text" name="emploi" placeholder="Entrez l'emploi'">
         <input type="number" name="sup" placeholder="Numero du suprérieur">
         <input type="date" name="embauche" placeholder="Entrez la date d'embauche">
-        <input type="number" name="sal" placeholder="Entrez le salaire">
-        <input type="number" name="comm" placeholder="Entrez la commission">
+        <input type="number" step="any" name="sal" placeholder="Entrez le salaire">
+        <input type="number" step="any" name="comm" placeholder="Entrez la commission">
         <label for="noserv">Service:  </label>
         <select id="noserv" name="noserv">
             <option value="" selected hidden value="">Selectionner</option>
@@ -54,14 +54,14 @@
     ?>
             <div>
                 <form class="formu" action="includes/modifier.php" target="tableau-connecte.php" method="POST">
-                    <input type="number"  name="noemp" value=<?php echo $datas[0]['Noemp'];?> placeholder="Entrez le noemp">
+                    <input type="number"  name="noemp"  value=<?php echo $datas[0]['Noemp'];?> placeholder="Entrez le noemp">
                     <input type="text"  name="nom" value=<?php echo $datas[0]['nom'];?> placeholder="Entrez le nom">
                     <input type="text"  name="prenom" value=<?php echo $datas[0]['prenom'];?> placeholder="Entrez le prenom">
                     <input type="text"  name="emploi" value=<?php echo $datas[0]['emploi'];?> placeholder="Entrez l'emploi'">
                     <input type="number"  name="sup" value=<?php echo $datas[0]['sup'];?> placeholder="Numero du suprérieur">
                     <input type="date" c name="embauche" value=<?php echo $datas[0]['embauche'];?> placeholder="Entrez la date d'embauche">
-                    <input type="number"  name="sal" value=<?php echo $datas[0]['sal'];?> placeholder="Entrez le salaire">
-                    <input type="number"  name="comm" value=<?php echo $datas[0]['comm'];?> placeholder="Entrez la commission">
+                    <input type="number" step="any" name="sal" value=<?php echo $datas[0]['sal'];?> placeholder="Entrez le salaire">
+                    <input type="number" step="any" name="comm" value=<?php echo $datas[0]['comm'];?> placeholder="Entrez la commission">
                     <input type="number"  name="noserv" value=<?php echo $datas[0]['Noserv'];?> placeholder="Entrez le numero de service">
                     <input type="number"  name="noproj" value=<?php echo $datas[0]['noproj'];?> placeholder="Entrez le numero projet">
                     <input type="submit"  value="Soumettre">    

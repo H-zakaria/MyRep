@@ -31,7 +31,7 @@ var_dump($result);
  */ -->
 <body>   
     <div>
-    <a href='form.php?but=ajouter'><button class='btn btn-warning'>ajouter</button></a>
+    <a href='form.php?but=ajouter'><button class='btn btn-warning'>ajouter employé</button></a>
         <table>
             <thead>
                 <tr>
@@ -85,10 +85,51 @@ var_dump($result);
             }else{
                 echo "La base de donnée est vide";
             }
-
             
             ?>
+            </tbody>
+        </table>
+        </div>
+        <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No service</th>
+                    <th>Designatiion</th>
+                    <th>Ville</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
             
+            echo "<br>";
+            echo "<hr>";
+            echo "<br>";
+
+            mysqli_free_result($result);
+
+            $sql = "SELECT * FROM serv2;";
+            $result = mysqli_query($conn, $sql);
+            $resultCheck = mysqli_num_rows($result);
+            $datas = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            if($resultCheck > 0){
+                foreach($datas as $data){  
+                    
+                    echo "<tr>";
+                    echo "<td>".$data['Noserv']."</td>"; 
+                    echo "<td>".$data['service']."</td>"; 
+                    echo "<td>".$data['ville']."</td>"; 
+                    echo "<td><a href='details_service.php?noserv=$data[Noserv]'><button class='btn btn-warning'>details</button></a></td>";
+                    echo "<td><a href='form_services.php?noserv=$data[Noserv]&but=modifier'><button class='btn btn-warning'>Modifier</button></a></td>";
+                    echo "<td><a href='includes/supr_service.php?noserv=$data[Noserv]'><button class='btn btn-warning'>supprimer</button></a></td>";
+                    echo "</tr>";
+                }
+            }
+            ?>
+            <a href='form_services.php?but=ajouter'><button class='btn btn-warning'>ajouter un service</button></a>
             </tbody>
         </table>
         </div>

@@ -51,9 +51,7 @@ td, th {
     background-color: lightgoldenrodyellow;
     border: black 2px solid;
 }
-td{
-    padding: 5px;
-}
+
 .formu{
     margin: auto;
     margin-top: 50px;
@@ -72,4 +70,8 @@ td{
 }
 .formu input:hover{
     border: 2px solid darkgoldenrod;
+}
+.fk{
+    background-color: rgb(6, 6, 105);
+    color: lightgoldenrodyellow;
 }

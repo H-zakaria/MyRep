@@ -24,10 +24,10 @@
                     <th>Commission</th>
                     <th>No service</th>
                     <th>No projet</th>  
-                    <th>Service</th>
-                    <th>Ville</th>
-                    <th>Projet</th>
-                    <th>Budget</th>
+                    <th class = "fk">Service</th>
+                    <th class = "fk">Ville</th>
+                    <th class = "fk">Projet</th>
+                    <th class = "fk">Budget</th>
                     </tr>
             </thead>
             <tbody>
@@ -56,12 +56,12 @@
                     echo "<td>".$data['comm']."</td>"; 
                     echo "<td>".$data['Noserv']."</td>"; 
                     echo "<td>".$data['noproj']."</td>"; 
-                    echo "<td>".$data['service']."</td>"; 
-                    echo "<td>".$data['ville']."</td>"; 
-                    echo "<td>".$data['nomproj']."</td>"; 
-                    echo "<td>".$data['budget']."</td>"; 
+                    echo "<td class ='fk'>".$data['service']."</td>"; 
+                    echo "<td class ='fk'>".$data['ville']."</td>"; 
+                    echo "<td class ='fk'>".$data['nomproj']."</td>"; 
+                    echo "<td class ='fk'>".$data['budget']."</td>"; 
                     echo "</tr>";
-                }
+                } 
                 
             }
             mysqli_free_result($result);
@@ -81,10 +81,10 @@
                 <tr>
                     <th>Numero employe</th>
                     <th>Nom</th>
-                    <th>Service</th>
+                    <th class = "fk">Service</th>
                     <th>emploi</th>
                     <th>Numero du supérieur</th>
-                    <th>Projet en cours</th>
+                    <th class = "fk">Projet en cours</th>
                     </tr>
             </thead>
             <tbody>
@@ -105,10 +105,10 @@
                     echo "<tr>";
                     echo "<td>".$data['noemp']."</td>"; 
                     echo "<td>".$data['nom']."</td>"; 
-                    echo "<td>".$data['service']."</td>"; 
+                    echo "<td class = 'fk'>".$data['service']."</td>"; 
                     echo "<td>".$data['emploi']."</td>"; 
                     echo "<td>".$data['sup']."</td>"; 
-                    echo "<td>".$data['nomproj']."</td>"; 
+                    echo "<td class = 'fk'>".$data['nomproj']."</td>"; 
                     echo "</tr>";
                 }
 
