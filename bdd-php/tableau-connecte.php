@@ -39,12 +39,12 @@ var_dump($result);
                     <th>Nom</th>
                     <th>Prenom</th>
                     <th>emploi</th>
-                    <th>No superieur</th>
+                    <th>Nom du superieur</th>
                     <th>Embauche</th>
                     <th>Salaire</th>
                     <th>Commission</th>
-                    <th>No service</th>
-                    <th>No projet</th>
+                    <th>service</th>
+                    <th>Projet</th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -59,7 +59,10 @@ var_dump($result);
             // $result = mysqli_query($bdd, "select * FROM emp2;");
             // $data = mysqli_fetch_all($result, MYSQLI_NUM);
 
-            $sql = "SELECT * FROM emp2;";
+            $sql = "SELECT e.*, s.service, p.nomproj, e2.nom as nsup FROM emp2 e
+            INNER JOIN services s on s.noserv = e.noserv
+            INNER JOIN proj p on p.noproj = e.noproj
+            LEFT JOIN emp2 e2 on e.sup = e2.noemp;";
             $result = mysqli_query($conn, $sql);
             $resultCheck = mysqli_num_rows($result);
             $datas = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -71,12 +74,12 @@ var_dump($result);
                     echo "<td>".$data['nom']."</td>"; 
                     echo "<td>".$data['prenom']."</td>"; 
                     echo "<td>".$data['emploi']."</td>"; 
-                    echo "<td>".$data['sup']."</td>"; 
+                    echo "<td>".$data['nsup']."</td>"; 
                     echo "<td>".$data['embauche']."</td>"; 
                     echo "<td>".$data['sal']."</td>"; 
                     echo "<td>".$data['comm']."</td>"; 
-                    echo "<td>".$data['Noserv']."</td>"; 
-                    echo "<td>".$data['noproj']."</td>"; 
+                    echo "<td>".$data['service']."</td>"; 
+                    echo "<td>".$data['nomproj']."</td>"; 
                     echo "<td><a href='details.php?noemp=$data[Noemp]'><button class='btn btn-warning'>details</button></a></td>";
                     echo "<td><a href='form.php?noemp=$data[Noemp]&but=modifier'><button class='btn btn-warning'>Modifier</button></a></td>";
                     echo "<td><a href='includes/supr.php?noemp=$data[Noemp]'><button class='btn btn-warning'>supprimer</button></a></td>";

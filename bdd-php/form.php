@@ -13,7 +13,14 @@
 </head>
 <body>
     <?php
+    
     if($_GET['but'] == 'ajouter'){ 
+        $sql = "SELECT DISTINCT e.noemp, e.nom, e.prenom, service, e.emploi FROM emp2 e
+        INNER JOIN services s on e.noserv = s.noserv
+        INNER JOIN emp2 e2 on e.noemp = e2.sup;";
+        $result = mysqli_query($conn, $sql);
+        $superieurs = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
     ?>
     </div>
         <form class="formu" action="includes/ajouter.php" target="tableau-connecte.php" method="POST">
@@ -21,7 +28,18 @@
         <input type="text" name="nom" placeholder="Entrez le nom">
         <input type="text" name="prenom" placeholder="Entrez le prenom">
         <input type="text" name="emploi" placeholder="Entrez l'emploi'">
-        <input type="number" name="sup" placeholder="Numero du suprérieur">
+        <label for="sup">Superieur:  </label>
+        <select id="sup" name="sup">
+            <option value="" selected hidden value="">Selectionner</option>
+            <?php
+            foreach($superieurs as $sup){
+                ?>
+            <option value="<?php $sup['noemp']?>"><?php echo $sup['nom']." ".$sup['prenom']."--".$sup['emploi']."--".$sup['service'] ?></option>
+
+         <?php } ?> 
+            
+           </select>
+        
         <input type="date" name="embauche" placeholder="Entrez la date d'embauche">
         <input type="number" step="any" name="sal" placeholder="Entrez le salaire">
         <input type="number" step="any" name="comm" placeholder="Entrez la commission">
