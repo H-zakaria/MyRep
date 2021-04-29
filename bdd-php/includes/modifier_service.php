@@ -1,5 +1,6 @@
 <?php 
     include_once 'connexion_db.php';
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +19,7 @@
         $noserv = $_POST['noserv'];
         $service = $_POST['service'];
         $ville = $_POST['ville'];
-        $sql = "UPDATE serv2 SET noserv = '$noserv', service = '$service', ville = '$ville' WHERE Noserv = '$noserv'  or  service = '$service';";
+        $sql = "UPDATE serv SET noserv = '$noserv', service = '$service', ville = '$ville' WHERE noserv = '$noserv'  or  service = '$service';";
         mysqli_query($conn, $sql);
         header("Location: ../tableau-connecte.php?Modification=succes");
     }

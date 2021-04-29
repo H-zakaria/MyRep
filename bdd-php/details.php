@@ -1,16 +1,13 @@
 <?php
-    include_once 'includes/connexion_db.php';
+   
+    include_once 'header.php';
+    
+    if(!isset($_SESSION['user_id'])){
+        
+        header("Location: signup&login_form.php");
+        
+    }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css" type="text/css">
-    <title>details</title>
-</head>
-    <body>
         <table>
             <thead>
                 <tr>
@@ -24,6 +21,7 @@
                     <th>Commission</th>
                     <th>No service</th>
                     <th>No projet</th>  
+                    <th>Date d'ajout</th>
                     <th class = "fk">Service</th>
                     <th class = "fk">Ville</th>
                     <th class = "fk">Projet</th>
@@ -34,19 +32,19 @@
             <?php
             $noemp =$_GET['noemp'];
             
-            $sql = "SELECT e.*, s.*, p.* FROM emp2 e 
-                    INNER JOIN services s on e.noserv = s.noserv
+            $sql = "SELECT e.*, s.*, p.* FROM emp e 
+                    INNER JOIN serv s on e.noserv = s.noserv
                     INNER JOIN proj p on e.noproj = p.noproj
                     WHERE noemp ='$noemp';";
             $result = mysqli_query($conn, $sql);
             $resultCheck = mysqli_num_rows($result);
             $datas = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
+            print_r($datas);
             if($resultCheck > 0){
                 foreach($datas as $data){  
                     
                     echo "<tr>";
-                    echo "<td>".$data['Noemp']."</td>"; 
+                    echo "<td>".$data['noemp']."</td>"; 
                     echo "<td>".$data['nom']."</td>"; 
                     echo "<td>".$data['prenom']."</td>"; 
                     echo "<td>".$data['emploi']."</td>"; 
@@ -54,8 +52,9 @@
                     echo "<td>".$data['embauche']."</td>"; 
                     echo "<td>".$data['sal']."</td>"; 
                     echo "<td>".$data['comm']."</td>"; 
-                    echo "<td>".$data['Noserv']."</td>"; 
+                    echo "<td>".$data['noserv']."</td>"; 
                     echo "<td>".$data['noproj']."</td>"; 
+                    echo "<td>".$data['date_ajout']."</td>"; 
                     echo "<td class ='fk'>".$data['service']."</td>"; 
                     echo "<td class ='fk'>".$data['ville']."</td>"; 
                     echo "<td class ='fk'>".$data['nomproj']."</td>"; 
@@ -85,16 +84,16 @@
                     <th>emploi</th>
                     <th>Numero du supérieur</th>
                     <th class = "fk">Projet en cours</th>
-                    </tr>
+                </tr>
             </thead>
             <tbody>
             <?php
            
             
             $sql2 = "SELECT sup.noemp, sup.nom, s.service, sup.emploi, sup.sup, proj.nomproj
-                    FROM emp2 as sup
-                    INNER JOIN emp2 e on e.sup = sup.noemp
-                    INNER JOIN services as s on sup.noserv = s.noserv
+                    FROM emp as sup
+                    INNER JOIN emp e on e.sup = sup.noemp
+                    INNER JOIN serv as s on sup.noserv = s.noserv
                     INNER JOIN proj on sup.noproj = proj.noproj
                     WHERE e.noemp ='$noemp';";
             $result2 = mysqli_query($conn, $sql2);
@@ -117,8 +116,39 @@
             ?>
             </tbody>
             </table>
+            <br>
+            <hr>
+            <br>
+            <h3>Historique des modifications:</h3>
+            <table>
+            <thead>
+                <tr>
+                    <th>Modifications</th>
+                    <th>Date</th>
+                    <th>Heure</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+           
             
-        
+            $sql3 = "SELECT m.modification, m.Date, m.Time FROM date_modif m WHERE m.noemp = '$noemp'";
+            $result3 = mysqli_query($conn, $sql3);
+            $datas3 = mysqli_fetch_all($result3, MYSQLI_ASSOC);
+         
+            
+                foreach($datas3 as $data){  
+                    
+                    echo "<tr>";
+                    echo "<td>".$data['modification']."</td>"; 
+                    echo "<td>".$data['Date']."</td>";
+                    echo "<td>".$data['Time']."</td>";
+                    echo "</tr>";
+                }            
+            ?>
+            </tbody>
+            </table>
     </body>
 </html>
 

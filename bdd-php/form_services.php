@@ -26,7 +26,7 @@
     <?php
     }else if($_GET["but"] == 'modifier')
     {
-        $sql = "SELECT * FROM serv2 WHERE noserv = $_GET[noserv];";
+        $sql = "SELECT * FROM serv WHERE noserv = $_GET[noserv];";
         $result = mysqli_query($conn, $sql);
         $resultCheck = mysqli_num_rows($result);
         $datas = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -38,7 +38,7 @@
     ?>
             <div>
                 <form class="formu" action="includes/modifier_service.php" method="POST">
-                    <input type="number"  name="noserv"  value=<?php echo $datas[0]['Noserv'];?> placeholder="Entrez le numero du service">
+                    <input type="number"  name="noserv"  value=<?php echo $datas[0]['noserv'];?> placeholder="Entrez le numero du service">
                     <input type="text"  name="service" value=<?php echo $datas[0]['service'];?> placeholder="Entrez le nom du service">
                     <input type="text"  name="ville" value=<?php echo $datas[0]['ville'];?> placeholder="Entrez le nom de la ville">
                     <input type="submit"  value="Soumettre">    

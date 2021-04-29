@@ -2,6 +2,6 @@
 $dbServername ="localhost";
 $username = "zak";
 $dbPassword="mdp";
-$dbName="gestion";
+$dbName="gestion_emp";
 
 $conn = mysqli_connect($dbServername, $username, $dbPassword, $dbName);

@@ -1,15 +1,7 @@
-<?php include_once "./includes/connexion_db.php";?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css" type="text/css">
-    <title>details</title>
-</head>
-    <body>
+<?php
+   
+    include_once 'header.php';
+?>
         <table>
             <thead>
                 <tr>
@@ -23,8 +15,8 @@
             <?php
             $noemp =$_GET['noserv'];
             
-            $sql = "SELECT serv2.*, count(emp2.noemp) as 'nombre_d_employes_du_service' from serv2 
-                INNER JOIN emp2 on emp2.noserv = serv2.noserv;";
+            $sql = "SELECT serv.*, count(emp.noemp) as 'nombre_d_employes_du_service' from serv
+                INNER JOIN emp on emp.noserv = serv.noserv;";
             $result = mysqli_query($conn, $sql);
             $resultCheck = mysqli_num_rows($result);
             $datas = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -33,7 +25,7 @@
                 foreach($datas as $data){  
                     
                     echo "<tr>";
-                    echo "<td>".$data['Noserv']."</td>"; 
+                    echo "<td>".$data['noserv']."</td>"; 
                     echo "<td>".$data['service']."</td>"; 
                     echo "<td>".$data['ville']."</td>"; 
                     echo "<td class = 'fk' >".$data['nombre_d_employes_du_service']."</td>"; 

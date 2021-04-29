@@ -1,29 +1,18 @@
 <?php
-    include_once 'includes/connexion_db.php';
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css" type="text/css">
-    <title>formulaire d'ajout/modification</title>
-</head>
-<body>
-    <?php
+   
+    include_once 'header.php';
     
-    if($_GET['but'] == 'ajouter'){ 
-        $sql = "SELECT DISTINCT e.noemp, e.nom, e.prenom, service, e.emploi FROM emp2 e
-        INNER JOIN services s on e.noserv = s.noserv
-        INNER JOIN emp2 e2 on e.noemp = e2.sup;";
+
+     
+        $sql = "SELECT DISTINCT e.noemp, e.nom, e.prenom, service, e.emploi FROM emp e
+        INNER JOIN serv s on e.noserv = s.noserv
+        INNER JOIN emp e2 on e.noemp = e2.sup;";
         $result = mysqli_query($conn, $sql);
         $superieurs = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
     ?>
     </div>
-        <form class="formu" action="includes/ajouter.php" target="tableau-connecte.php" method="POST">
+        <form class="formu" action="ajouter.php" method="POST">
         <input type="number" name="noemp" placeholder="Entrez le noemp">
         <input type="text" name="nom" placeholder="Entrez le nom">
         <input type="text" name="prenom" placeholder="Entrez le prenom">
@@ -32,12 +21,14 @@
         <select id="sup" name="sup">
             <option value="" selected hidden value="">Selectionner</option>
             <?php
-            foreach($superieurs as $sup){
-                ?>
-            <option value="<?php $sup['noemp']?>"><?php echo $sup['nom']." ".$sup['prenom']."--".$sup['emploi']."--".$sup['service'] ?></option>
 
-         <?php } ?> 
+            foreach($superieurs as $sup){
+             ?>
+            <option value="<?php echo $sup['noemp']?>"><?php echo $sup['nom']." ".$sup['emploi']." ".$sup['service']?> </option>;
             
+            <?php
+            } 
+            ?>
            </select>
         
         <input type="date" name="embauche" placeholder="Entrez la date d'embauche">
@@ -59,43 +50,5 @@
         </form>
         <a href="tableau-connecte.php"><button>TABLEAU</button></a>
     </div>
-    <?php
-    }else if($_GET["but"] == 'modifier')
-    {
-        $sql = "SELECT * FROM emp2 WHERE noemp = $_GET[noemp];";
-        $result = mysqli_query($conn, $sql);
-        $resultCheck = mysqli_num_rows($result);
-        $datas = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            if($resultCheck > 0)
-            {
-
-    ?>
-            <div>
-                <form class="formu" action="includes/modifier.php" target="tableau-connecte.php" method="POST">
-                    <input type="number"  name="noemp"  value=<?php echo $datas[0]['Noemp'];?> placeholder="Entrez le noemp">
-                    <input type="text"  name="nom" value=<?php echo $datas[0]['nom'];?> placeholder="Entrez le nom">
-                    <input type="text"  name="prenom" value=<?php echo $datas[0]['prenom'];?> placeholder="Entrez le prenom">
-                    <input type="text"  name="emploi" value=<?php echo $datas[0]['emploi'];?> placeholder="Entrez l'emploi'">
-                    <input type="number"  name="sup" value=<?php echo $datas[0]['sup'];?> placeholder="Numero du suprérieur">
-                    <input type="date" c name="embauche" value=<?php echo $datas[0]['embauche'];?> placeholder="Entrez la date d'embauche">
-                    <input type="number" step="any" name="sal" value=<?php echo $datas[0]['sal'];?> placeholder="Entrez le salaire">
-                    <input type="number" step="any" name="comm" value=<?php echo $datas[0]['comm'];?> placeholder="Entrez la commission">
-                    <input type="number"  name="noserv" value=<?php echo $datas[0]['Noserv'];?> placeholder="Entrez le numero de service">
-                    <input type="number"  name="noproj" value=<?php echo $datas[0]['noproj'];?> placeholder="Entrez le numero projet">
-                    <input type="submit"  value="Soumettre">    
-                </form>
-                <a href="tableau-connecte.php"><button>TABLEAU</button></a>
-            </div>
-    <?php     
-            }       
-    }else
-    {
-        echo "l'employé n'existe pas.";
-    }
-    ?>
-    
-    
-    
-    
 </body>
 </html>

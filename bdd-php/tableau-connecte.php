@@ -1,37 +1,24 @@
-<?php
-    include_once 'includes/connexion_db.php';
+<?php 
+include_once 'header.php';
+
+    if (isset($_SESSION['user_id']))
+    {
+
+        echo "<p class='msg_acc'>vous êtes connecté, bienvenue ".$_SESSION['nom']."</p>";
+        echo "<button><a href='./includes/logout.php'>deconnexion</a></button>";
+
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css" type="text/css">
-    <title>php-bdd</title>
-</head>
-<!-- $bdd = mysqli_init();
-mysqli_real_connect($bdd, "127.0.0.1", "root", "", "gestion_employes");
-$result = mysqli_query($bdd, "DELETE FROM emp WHERE noemp = 1615;");
-var_dump($result);
-
-// $donnees = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-
-
-// exercice :
-
-/** -->
- <!-- * - Utiliser la BDD gestion_employes
- * - Afficher les employes dans un tableau HTML(BOOTSTRAP): nom, prenom, emploi, superieur, service
- * - Pour chaque ligne du tableau : boutton detail, modifier, supprimer
- * - En haut du tableau, un bouton pou' l'ajout d'un nouvel employé
- * - Même chose pour les services
- */ -->
-<body>   
+    
     <div>
-    <a href='form.php?but=ajouter'><button class='btn btn-warning'>ajouter employé</button></a>
+    <?php 
+     $sql = "SELECT count(*) from emp where date_ajout = DATE(NOW());";
+     $result = mysqli_query($conn, $sql);
+     $datas = mysqli_fetch_all($result, MYSQLI_ASSOC);
+     
+    
+    ?>
+    <a href='form.php?'><button class='btn btn-warning'>ajouter employé</button></a>
         <table>
             <thead>
                 <tr>
@@ -45,32 +32,48 @@ var_dump($result);
                     <th>Commission</th>
                     <th>service</th>
                     <th>Projet</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    
+                    <th colspan="2">Ajouts du jour => </th>
+                    <th><?php echo $datas[0]['count(*)'];?></th>
 
                 </tr>
             </thead>
             <tbody>
-            <?php //fermer apres
-            // $bdd = mysqli_init();
-            // mysqli_real_connect($bdd, "localhost", "zak", "mdp", "gestion");
-            // $result = mysqli_query($bdd, "select * FROM emp2;");
-            // $data = mysqli_fetch_all($result, MYSQLI_NUM);
+            <?php 
 
-            $sql = "SELECT e.*, s.service, p.nomproj, e2.nom as nsup FROM emp2 e
-            INNER JOIN services s on s.noserv = e.noserv
+            $sql = "SELECT e.*, s.service, p.nomproj, e2.nom as nsup FROM emp e
+            INNER JOIN serv s on s.noserv = e.noserv
             INNER JOIN proj p on p.noproj = e.noproj
-            LEFT JOIN emp2 e2 on e.sup = e2.noemp;";
+            LEFT JOIN emp e2 on e.sup = e2.noemp;";
+            
             $result = mysqli_query($conn, $sql);
             $resultCheck = mysqli_num_rows($result);
             $datas = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            
+
+            
+            $sql = "SELECT DISTINCT e.noemp FROM emp e
+            INNER JOIN emp e2 on e.noemp = e2.sup;";
+
+            $result2 = mysqli_query($conn, $sql);
+            $sups = mysqli_fetch_all($result2, MYSQLI_NUM);
+            $sups_1d = [];
+            $count = 0;
+            foreach($sups as $s){
+                $count++;
+            }
+            for( $i =0; $i < $count; $i++){
+                $sups_1d[$i] = $sups[$i][0];
+            }
+
             if($resultCheck > 0){
                 foreach($datas as $data){  
-                    
-                    echo "<tr>";
-                    echo "<td>".$data['Noemp']."</td>"; 
+                    if(in_array($data['noemp'], $sups_1d))
+                    {
+                        echo "<tr class='sup'>";
+                    }else{
+                        echo "<tr>";
+                    }
+                    echo "<td>".$data['noemp']."</td>"; 
                     echo "<td>".$data['nom']."</td>"; 
                     echo "<td>".$data['prenom']."</td>"; 
                     echo "<td>".$data['emploi']."</td>"; 
@@ -80,9 +83,16 @@ var_dump($result);
                     echo "<td>".$data['comm']."</td>"; 
                     echo "<td>".$data['service']."</td>"; 
                     echo "<td>".$data['nomproj']."</td>"; 
-                    echo "<td><a href='details.php?noemp=$data[Noemp]'><button class='btn btn-warning'>details</button></a></td>";
-                    echo "<td><a href='form.php?noemp=$data[Noemp]&but=modifier'><button class='btn btn-warning'>Modifier</button></a></td>";
-                    echo "<td><a href='includes/supr.php?noemp=$data[Noemp]'><button class='btn btn-warning'>supprimer</button></a></td>";
+
+                    echo "<td><a href='details.php?noemp=$data[noemp]'><button class='btn btn-warning'>details</button></a></td>";
+                    if($_SESSION['profil'] == "admin")
+                    {
+                        echo "<td><a href='form_modif.php?noemp=$data[noemp]'><button class='btn btn-warning'>Modifier</button></a></td>";
+                    }
+                    if((!in_array($data['noemp'], $sups_1d)) && ($_SESSION['profil'] == 'admin'))
+                    {
+                         echo "<td><a href='includes/supr.php?noemp=$data[noemp]'><button class='btn btn-warning'>supprimer</button></a></td>";
+                    }
                     echo "</tr>";
                 }
             }else{
@@ -112,9 +122,9 @@ var_dump($result);
             echo "<hr>";
             echo "<br>";
 
-            mysqli_free_result($result);
+            
 
-            $sql = "SELECT * FROM serv2;";
+            $sql = "SELECT * FROM serv;";
             $result = mysqli_query($conn, $sql);
             $resultCheck = mysqli_num_rows($result);
             $datas = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -122,12 +132,12 @@ var_dump($result);
                 foreach($datas as $data){  
                     
                     echo "<tr>";
-                    echo "<td>".$data['Noserv']."</td>"; 
+                    echo "<td>".$data['noserv']."</td>"; 
                     echo "<td>".$data['service']."</td>"; 
                     echo "<td>".$data['ville']."</td>"; 
-                    echo "<td><a href='details_service.php?noserv=$data[Noserv]'><button class='btn btn-warning'>details</button></a></td>";
-                    echo "<td><a href='form_services.php?noserv=$data[Noserv]&but=modifier'><button class='btn btn-warning'>Modifier</button></a></td>";
-                    echo "<td><a href='includes/supr_service.php?noserv=$data[Noserv]'><button class='btn btn-warning'>supprimer</button></a></td>";
+                    echo "<td><a href='details_service.php?noserv=$data[noserv]'><button class='btn btn-warning'>details</button></a></td>";
+                    echo "<td><a href='form_services.php?noserv=$data[noserv]&but=modifier'><button class='btn btn-warning'>Modifier</button></a></td>";
+                    echo "<td><a href='includes/supr_service.php?noserv=$data[noserv]'><button class='btn btn-warning'>supprimer</button></a></td>";
                     echo "</tr>";
                 }
             }
@@ -136,5 +146,16 @@ var_dump($result);
             </tbody>
         </table>
         </div>
+
+        <?php 
+            }
+            else
+            {
+                header("Location: signup&login_form.php");
+                
+
+            
+            }
+            ?>
 </body>
 </html>

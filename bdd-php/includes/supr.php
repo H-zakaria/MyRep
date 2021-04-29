@@ -13,10 +13,24 @@
 </head>
 <body>
 <?php
-$noemp = $_GET['noemp'];
-$sql = "DELETE FROM emp2 WHERE noemp = '$noemp';";
-mysqli_query($conn, $sql);
-header("Location: ../tableau-connecte.php?suppression=succes");
+
+$sql = "SELECT DISTINCT e.noemp FROM emp 
+INNER JOIN emp e2 on e.noemp = e2.sup;";
+
+$result = mysqli_query($conn, $sql);
+$sups = mysqli_fetch_all($result, MYSQLI_ASSOC);
+mysqli_free_result($result);
+$sups_1d = [];
+foreach($sups as $sup){
+    $sups_1d [] = $sup['noemp'];
+}
+if(!in_array($_GET['noemp'], $sups_1d)){
+    $noemp = $_GET['noemp'];
+    $sql = "DELETE FROM emp WHERE noemp = '$noemp';";
+    mysqli_query($conn, $sql);
+    header("Location: ../tableau-connecte.php?suppression=succes");
+}
+
 
 ?>
 </body>
