@@ -1,0 +1,12 @@
+jquery = library qui utilise js; aide avec methodes => 'write less do more..'
+
+tel le fichier jquery, mettre dans le doss du proj
+declarer le script de ce fichier normalement mais le mettre avant le script personnel;
+
+qd '$' dans le script perso => jquery
+
+voir exemple js vanilla vs Code jquery
+
+code + compact, acces plus rapide aux proprietés.. 
+$ is undefined => fichier pas reconnu par navigateur ou mal positioné dans le fichier html..
+
