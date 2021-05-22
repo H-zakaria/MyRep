@@ -71,7 +71,6 @@ $('select').change(() => {            //qd une option est selectionée aller che
           if (!selected) {                                         //si c'est la premiere fois qu'on clique sur une des options du premier select
             const newSelect = $('<select>').appendTo('body')
             newSelect.attr('id', 's2')
-            newSelect.append(new Option('models ', ''))
             for (i = 0; i < models.length; i++) {                                   //insertion des options dans le select
               if (models[i].marque == marque) {
                 newSelect.append(new Option(models[i].nomModel, models[i].nomModel))
