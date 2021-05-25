@@ -30,72 +30,73 @@
 // }
 // window.onload = getSelectVal;
 
-
 //recup les voitures
 
 let selected = false;
-$.ajax(
-  'Traitement.php',
-  {
-    success: function (data) {
-      console.log('Appel AJAX réussi')
-      console.log(data)
-      // console.log(models.marque)
-      try {
-        const voitures = JSON.parse(data);
-        // console.log (voitures)
-        for (i = 0; i < voitures.length; i++) {                                   //insertion des options dans le select
-          $('select').append(new Option(voitures[i].marque, voitures[i].marque))
-        }
+$.ajax('Traitement.php', {
+  success: function (data) {
+    //si success
+    console.log('Appel AJAX réussi');
+    console.log(data);
+    // console.log(models.marque)
+    try {
+      const voitures = JSON.parse(data);
+      // console.log (voitures)
+      for (i = 0; i < voitures.length; i++) {
+        //insertion des options dans le select
+        $('select').append(new Option(voitures[i].marque, voitures[i].marque)); //valeur, text
+      }
+    } catch (e) {
+      console.error('Parsing error:', e);
+    }
+  },
+  error: function () {
+    console.error("erreur lors de l'appel AJAX");
+  },
+});
 
+$('select').change(() => {
+  //qd une option est selectionée aller chercher les modeles correspondants cad modeles ayant la mm marque
+  const marque = $('option:selected').val();
+  $.ajax('Traitement.php?model', {
+    //?model => ce qu'on veut get
+    success: function (data) {
+      try {
+        const models = JSON.parse(data);
+        if (!selected) {
+          //si c'est la premiere fois qu'on clique sur une des options du premier select
+          const newSelect = $('<select>').appendTo('body'); // on crée un autre select avec un id de 's2'
+          newSelect.attr('id', 's2');
+          for (i = 0; i < models.length; i++) {
+            //insertion des options dans le select
+            if (models[i].marque == marque) {
+              //si la marque de ce modèle correspond avec la marque selectionée
+              newSelect.append(
+                new Option(models[i].nomModel, models[i].nomModel)
+              );
+            }
+          }
+          selected = true;
+          console.log(selected);
+        } else {
+          //si c'est la deuxieme fois ou + qu'on selectionne une marque
+          console.log('here');
+          $('#s2').empty(); //on supprime les anciennes options
+          for (i = 0; i < models.length; i++) {
+            //insertion des nouvelles options dans le select
+            if (models[i].marque == marque) {
+              $('#s2').append(
+                new Option(models[i].nomModel, models[i].nomModel)
+              );
+            }
+          }
+        }
       } catch (e) {
-        console.error("Parsing error:", e);
+        console.error('Parsing error:', e);
       }
     },
     error: function () {
-      console.error("erreur lors de l'appel AJAX")
-    }
-  }
-)
-
-
-$('select').change(() => {            //qd une option est selectionée aller chercher les modeles correspondants cad modeles ayant la mm marque
-  const marque = $('option:selected').val()
-  $.ajax(
-    'Traitement.php?model',
-    {
-      success: function (data) {
-
-        try {
-          const models = JSON.parse(data);
-          if (!selected) {                                         //si c'est la premiere fois qu'on clique sur une des options du premier select
-            const newSelect = $('<select>').appendTo('body')
-            newSelect.attr('id', 's2')
-            for (i = 0; i < models.length; i++) {                                   //insertion des options dans le select
-              if (models[i].marque == marque) {
-                newSelect.append(new Option(models[i].nomModel, models[i].nomModel))
-              }
-            }
-            selected = true;
-            console.log(selected)
-          } else {                                    //si c'est la deuxieme fois qu'on selectionne une marque 
-            console.log('here')
-            $('#s2').empty()                                        //on supprime les anciennes options
-            for (i = 0; i < models.length; i++) {                                   //insertion des options dans le select
-              if (models[i].marque == marque) {
-                $('#s2').append(new Option(models[i].nomModel, models[i].nomModel))
-              }
-            }
-          }
-
-        } catch (e) {
-          console.error("Parsing error:", e);
-        }
-      },
-      error: function () {
-        console.error("erreur lors de l'appel AJAX")
-      }
-    }
-  )
-})
-
+      console.error("erreur lors de l'appel AJAX");
+    },
+  });
+});
